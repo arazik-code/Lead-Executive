@@ -1,0 +1,42 @@
+services:
+  api:
+    profiles: [demo]
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: postgres://elc:${POSTGRES_PASSWORD:-local-dev-only-change-me}@postgres:5432/elc
+      ORGANIZATION_ID: 00000000-0000-4000-8000-000000000001
+      AUTH_MODE: development
+      CORS_ORIGINS: http://localhost:8080
+      DEMO_SEED: '1'
+    command: ["sh", "-c", "node dist/database/migrate.js && node dist/database/seed-development.js && node dist/database/seed-demo.js && node dist/main.js"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/api/v1/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 15s
+    restart: unless-stopped
+
+  web:
+    profiles: [demo]
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        VITE_API_BASE_URL: /api/v1
+        VITE_API_AUTH_MODE: development
+        VITE_ELC_DEV_USER_ID: local-admin
+        VITE_GOOGLE_CLIENT_ID: ''
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

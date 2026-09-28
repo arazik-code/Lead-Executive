@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 48" fill="none">
+  <!-- Logo Icon -->
+  <g transform="translate(0, 0)">
+    <!-- Outer hexagon shield shape -->
+    <path d="M24 2L42 12V28C42 36.837 34.837 44 26 46L24 46.5L22 46C13.163 44 6 36.837 6 28V12L24 2Z" fill="url(#gradient1)" stroke="url(#gradient2)" stroke-width="1.5"/>
+    
+    <!-- Inner geometric pattern - ascending bars -->
+    <rect x="13" y="28" width="4" height="10" rx="1" fill="url(#gradient3)"/>
+    <rect x="19" y="22" width="4" height="16" rx="1" fill="url(#gradient3)"/>
+    <rect x="25" y="16" width="4" height="22" rx="1" fill="url(#gradient3)"/>
+    <rect x="31" y="10" width="4" height="28" rx="1" fill="url(#gradient3)"/>
+    
+    <!-- Target/crosshair accent -->
+    <circle cx="24" cy="8" r="2" fill="#00E5FF"/>
+    <path d="M24 4V6M24 10V12M20 8H22M26 8H28" stroke="#00E5FF" stroke-width="1" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Text: Executive Lead Control -->
+  <text x="52" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="700" fill="#FAFAFA" letter-spacing="0.5">
+    EXECUTIVE
+  </text>
+  <text x="52" y="38" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="400" fill="#A1A1AA" letter-spacing="0.5">
+    LEAD CONTROL
+  </text>
+  
+  <!-- Trademark symbol -->
+  <text x="153" y="22" font-family="system-ui, -apple-system, sans-serif" font-size="8" fill="#00E5FF">™</text>
+  
+  <defs>
+    <linearGradient id="gradient1" x1="6" y1="2" x2="42" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0d0d1a"/>
+    </linearGradient>
+    <linearGradient id="gradient2" x1="6" y1="2" x2="42" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="50%" stop-color="#00B8CC"/>
+      <stop offset="100%" stop-color="#9D4EDD"/>
+    </linearGradient>
+    <linearGradient id="gradient3" x1="13" y1="10" x2="35" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="100%" stop-color="#9D4EDD"/>
+    </linearGradient>
+  </defs>
+</svg>

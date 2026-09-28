@@ -1,0 +1,7 @@
+allowBuilds:
+  '@scarf/scarf': false
+  esbuild: true
+minimumReleaseAgeExclude:
+  - '@nestjs/common@12.1.1'
+  - '@nestjs/core@12.1.1'
+  - '@nestjs/platform-express@12.1.1'

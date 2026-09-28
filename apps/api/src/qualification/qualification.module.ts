@@ -1,0 +1,7 @@
+import { Module } from '@nestjs/common';
+import { AuthModule } from '../identity/auth.module';
+import { QualificationController } from './qualification.controller';
+import { QualificationService } from './qualification.service';
+
+@Module({ imports: [AuthModule], controllers: [QualificationController], providers: [QualificationService] })
+export class QualificationModule {}

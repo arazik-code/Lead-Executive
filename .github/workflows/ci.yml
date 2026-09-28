@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Web typecheck, lint, and production build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.15.0
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm build
+
+  api:
+    name: API checks and PostgreSQL migrations
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: elc
+          POSTGRES_USER: elc
+          POSTGRES_PASSWORD: ci-only-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U elc -d elc"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://elc:ci-only-password@localhost:5432/elc
+      AUTH_MODE: development
+      ORGANIZATION_ID: 00000000-0000-4000-8000-000000000001
+      DEMO_SEED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.15.0
+          cache: pnpm
+          cache-dependency-path: apps/api/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+        working-directory: apps/api
+      - run: pnpm typecheck
+        working-directory: apps/api
+      - run: pnpm build
+        working-directory: apps/api
+      - run: pnpm test
+        working-directory: apps/api
+      - run: pnpm db:migrate
+        working-directory: apps/api
+      - name: Confirm all migrations apply twice
+        run: pnpm db:migrate
+        working-directory: apps/api
+      - name: Provision local test identity
+        run: pnpm db:seed:development
+        working-directory: apps/api
+      - name: Seed the synthetic end-to-end demo dataset
+        run: pnpm db:seed:demo
+        working-directory: apps/api
